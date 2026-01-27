@@ -100,7 +100,7 @@ func attestKey(label, tag string, attestor attest.Attestor) (*attest.Resp, error
 
 	cred, err := findPrivateKey(label)
 	if err != nil {
-		return nil, fmt.Errorf(ErrAttestationFailure, label, tag, err)
+		return nil, fmt.Errorf(ErrAttestationFailure, label, tag, fmt.Errorf("failed to find private key: %w", err))
 	}
 	if cred == nil {
 		return nil, fmt.Errorf(ErrAttestationFailure, label, tag, errors.New("nil tpm.Credential handle from PCP store"))
@@ -116,7 +116,7 @@ func attestKey(label, tag string, attestor attest.Attestor) (*attest.Resp, error
 		KeyHandle: handle,
 	})
 	if err != nil {
-		return nil, fmt.Errorf(ErrAttestationFailure, label, tag, err)
+		return nil, fmt.Errorf(ErrAttestationFailure, label, tag, fmt.Errorf("attestation failed: %w", err))
 	}
 
 	return resp, nil
